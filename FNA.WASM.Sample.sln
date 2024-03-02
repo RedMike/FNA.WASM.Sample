@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib_browser-wasm", "Lib_bro
 		lib\SDL2\browser-wasm\SDL2.a = lib\SDL2\browser-wasm\SDL2.a
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FNA.Core", "FNA\FNA.Core.csproj", "{577593E9-0A1B-461E-B701-7DBAFAE831F3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,5 +41,9 @@ Global
 		{D44CFAB3-C2F1-429C-A48F-D66153305CDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D44CFAB3-C2F1-429C-A48F-D66153305CDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D44CFAB3-C2F1-429C-A48F-D66153305CDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{577593E9-0A1B-461E-B701-7DBAFAE831F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{577593E9-0A1B-461E-B701-7DBAFAE831F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{577593E9-0A1B-461E-B701-7DBAFAE831F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{577593E9-0A1B-461E-B701-7DBAFAE831F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
