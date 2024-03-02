@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk.WebAssembly">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup>
+      <WasmBuildNative>true</WasmBuildNative>
+      <EmccLinkOptimizationFlag>-O1</EmccLinkOptimizationFlag>
+      <EmccExtraLDFlags>--js-library $(MSBuildProjectDirectory.Replace('\', '/'))/js/library-fixemscripten.js -sFULL_ES3</EmccExtraLDFlags>
+      <WasmEmitSymbolMap>true</WasmEmitSymbolMap>
+      <WasmAllowUndefinedSymbols>true</WasmAllowUndefinedSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+      <!-- Get the emscripten-built binaries for these native files, and save them to the folders -->
+      
+      <NativeFileReference Include="..\lib\SDL2\browser-wasm\SDL2.a">
+          <Visible>false</Visible>
+      </NativeFileReference>
+      <NativeFileReference Include="..\lib\FNA3D\browser-wasm\FAudio.a">
+          <Visible>false</Visible>
+      </NativeFileReference>
+      <NativeFileReference Include="..\lib\FNA3D\browser-wasm\FNA3D.a">
+          <Visible>false</Visible>
+      </NativeFileReference>
+      <NativeFileReference Include="..\lib\FNA3D\browser-wasm\libmojoshader.a">
+          <Visible>false</Visible>
+      </NativeFileReference>
+      
+      <EmccExportedRuntimeMethod Include="SDL">
+          <Visible>false</Visible>
+      </EmccExportedRuntimeMethod>
+      <EmccExportedRuntimeMethod Include="GL">
+          <Visible>false</Visible>
+      </EmccExportedRuntimeMethod>
+      <EmccExportedRuntimeMethod Include="setMainLoop">
+          <Visible>false</Visible>
+      </EmccExportedRuntimeMethod>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FNA.WASM.Sample.Core\FNA.WASM.Sample.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FNA.WASM.Sample.Core\FNA.WASM.Sample.Core.csproj" />
+  </ItemGroup>
+</Project>
