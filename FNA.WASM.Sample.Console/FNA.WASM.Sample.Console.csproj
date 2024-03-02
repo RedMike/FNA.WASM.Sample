@@ -11,4 +11,18 @@
       <ProjectReference Include="..\FNA.WASM.Sample.Core\FNA.WASM.Sample.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <None Include="..\lib\FNA3D\x64\FAudio.dll" CopyToOutputDirectory="PreserveNewest">
+            <Visible>false</Visible>
+        </None>
+        <None Include="..\lib\FNA3D\x64\FNA3D.dll" CopyToOutputDirectory="PreserveNewest">
+            <Visible>false</Visible>
+        </None>
+        <None Include="..\lib\FNA3D\x64\libtheorafile.dll" CopyToOutputDirectory="PreserveNewest">
+            <Visible>false</Visible>
+        </None>
+        <None Include="..\lib\SDL2\x64\SDL2.dll" CopyToOutputDirectory="PreserveNewest">
+            <Visible>false</Visible>
+        </None>
+    </ItemGroup>
 </Project>
