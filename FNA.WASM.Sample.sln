@@ -9,6 +9,22 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_", "_", "{9AFD4DCB-374C-42
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FNA.WASM.Sample.Console", "FNA.WASM.Sample.Console\FNA.WASM.Sample.Console.csproj", "{D44CFAB3-C2F1-429C-A48F-D66153305CDE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib_x64", "Lib_x64", "{F57BF78F-6BFE-4037-AE48-72A46B4F3B3C}"
+	ProjectSection(SolutionItems) = preProject
+		lib\FNA3D\x64\FAudio.dll = lib\FNA3D\x64\FAudio.dll
+		lib\FNA3D\x64\FNA3D.dll = lib\FNA3D\x64\FNA3D.dll
+		lib\FNA3D\x64\libtheorafile.dll = lib\FNA3D\x64\libtheorafile.dll
+		lib\SDL2\x64\SDL2.dll = lib\SDL2\x64\SDL2.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib_browser-wasm", "Lib_browser-wasm", "{D0CDAFA1-5B4A-4693-AE29-24D875169C31}"
+	ProjectSection(SolutionItems) = preProject
+		lib\FNA3D\browser-wasm\FAudio.a = lib\FNA3D\browser-wasm\FAudio.a
+		lib\FNA3D\browser-wasm\FNA3D.a = lib\FNA3D\browser-wasm\FNA3D.a
+		lib\FNA3D\browser-wasm\libmojoshader.a = lib\FNA3D\browser-wasm\libmojoshader.a
+		lib\SDL2\browser-wasm\SDL2.a = lib\SDL2\browser-wasm\SDL2.a
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
