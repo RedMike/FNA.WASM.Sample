@@ -2,6 +2,13 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FNA.WASM.Sample.Core", "FNA.WASM.Sample.Core\FNA.WASM.Sample.Core.csproj", "{3764D425-92C8-4F02-B179-2E65C140FF33}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_", "_", "{9AFD4DCB-374C-42FE-86F8-8198901AB889}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FNA.WASM.Sample.Console", "FNA.WASM.Sample.Console\FNA.WASM.Sample.Console.csproj", "{D44CFAB3-C2F1-429C-A48F-D66153305CDE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +19,9 @@ Global
 		{3764D425-92C8-4F02-B179-2E65C140FF33}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3764D425-92C8-4F02-B179-2E65C140FF33}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3764D425-92C8-4F02-B179-2E65C140FF33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D44CFAB3-C2F1-429C-A48F-D66153305CDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D44CFAB3-C2F1-429C-A48F-D66153305CDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D44CFAB3-C2F1-429C-A48F-D66153305CDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D44CFAB3-C2F1-429C-A48F-D66153305CDE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
