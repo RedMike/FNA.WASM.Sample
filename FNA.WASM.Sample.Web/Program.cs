@@ -30,7 +30,7 @@ internal static void Main()
             if ((now - _lastLog).TotalSeconds > 1.0)
             {
                 _lastLog = now;
-                Console.WriteLine($"Main loop still running at: {now}");
+                //Console.WriteLine($"Main loop still running at: {now}");
             }
 
             if (_myGame != null)

@@ -8,10 +8,91 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script type='module' src="./main.js"></script>
+  
+  <style>
+    .wrapper {
+      display: block;
+      position: fixed;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .left {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .right {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      
+      background-color: rgba(255, 255, 255, 0.7);
+    }
+    
+    #logs {
+      display: block;
+      height: 30%;
+      overflow-y: scroll;
+    }
+    #logs>div {
+      display: block;
+      color: rgba(22, 22, 22, 1.0);
+      padding: 5px;
+    }
+    #logs>div:not(.empty):hover {
+      background-color: rgba(120, 120, 120, 0.5);
+      color: rgba(55, 55, 55, 1.0);
+    }
+    #logs p {
+      padding: 0;
+      margin: 0;
+      font-size: 80%;
+    }
+    
+    #errors {
+      display: block;
+      padding: 15px;
+      height: 30%;
+      overflow-y: scroll;
+    }
+    #errors>div {
+      display: block;
+      color: rgba(88, 22, 22, 1.0);
+      padding: 5px;
+    }
+    #errors>div:not(.empty):hover {
+      background-color: rgba(220, 120, 120, 0.5);
+      color: rgba(150, 55, 55, 1.0);
+    }
+    #errors p {
+      padding: 0;
+      margin: 0;
+      font-size: 80%;
+    }
+  </style>
 </head>
 
 <body>
-  <canvas id="canvas"></canvas>
+  <div class="wrapper">
+    <div class="left">
+      <canvas id="canvas"></canvas>
+    </div>
+    <div class="right">
+      <div id="logs">
+        
+      </div>
+      <div id="errors">
+        
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>

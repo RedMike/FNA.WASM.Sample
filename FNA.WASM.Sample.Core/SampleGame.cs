@@ -1,18 +1,22 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace FNA.WASM.Sample.Core;
 
 public class SampleGame : Game
 {
+    private KeyboardState _keyboardPrev = new KeyboardState();
+    private MouseState _mousePrev = new MouseState();
+    private GamePadState _gamepadPrev = new GamePadState();
+    
     public SampleGame()
     {
-        GraphicsDeviceManager gdm = new GraphicsDeviceManager(this);
+        var gdm = new GraphicsDeviceManager(this);
 
-        // Typically you would load a config here...
-        gdm.PreferredBackBufferWidth = 1280;
-        gdm.PreferredBackBufferHeight = 720;
+        gdm.PreferredBackBufferWidth = 600;
+        gdm.PreferredBackBufferHeight = 400;
         gdm.IsFullScreen = false;
-        gdm.SynchronizeWithVerticalRetrace = true;
+        gdm.SynchronizeWithVerticalRetrace = true; //TODO: does this do anything on WebGL?
     }
     
     protected override void Initialize()
@@ -37,7 +41,29 @@ public class SampleGame : Game
 
     protected override void Update(GameTime gameTime)
     {
-        // Run game logic in here. Do NOT render anything here!
+        var keyboard = Keyboard.GetState();
+        var mouse = Mouse.GetState();
+        var gamepad = GamePad.GetState(PlayerIndex.One);
+
+        if (keyboard.IsKeyUp(Keys.Space) && _keyboardPrev.IsKeyDown(Keys.Space))
+        {
+            Console.WriteLine("Space bar pressed!");
+        }
+
+        if (mouse.LeftButton == ButtonState.Released && _mousePrev.LeftButton == ButtonState.Pressed)
+        {
+            Console.WriteLine("Mouse clicked!");
+        }
+
+        if (gamepad.Buttons.A == ButtonState.Released && _gamepadPrev.Buttons.A == ButtonState.Pressed)
+        {
+            Console.WriteLine("Gamepad A pressed!");
+        }
+
+        _keyboardPrev = keyboard;
+        _mousePrev = mouse;
+        _gamepadPrev = gamepad;
+        
         base.Update(gameTime);
     }
 
