@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace FNA.WASM.Sample.Core;
@@ -8,6 +9,9 @@ public class SampleGame : Game
     private KeyboardState _keyboardPrev = new KeyboardState();
     private MouseState _mousePrev = new MouseState();
     private GamePadState _gamepadPrev = new GamePadState();
+
+    private SpriteBatch _spriteBatch;
+    private Texture2D _texture;
     
     public SampleGame()
     {
@@ -17,6 +21,8 @@ public class SampleGame : Game
         gdm.PreferredBackBufferHeight = 400;
         gdm.IsFullScreen = false;
         gdm.SynchronizeWithVerticalRetrace = true; //TODO: does this do anything on WebGL?
+
+        Content.RootDirectory = "/assets";
     }
     
     protected override void Initialize()
@@ -29,14 +35,15 @@ public class SampleGame : Game
 
     protected override void LoadContent()
     {
-        // Load textures, sounds, and so on in here...
-        base.LoadContent();
+        _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+        _texture = Content.Load<Texture2D>("img/test1.png");
     }
 
     protected override void UnloadContent()
     {
-        // Clean up after yourself!
-        base.UnloadContent();
+        _spriteBatch.Dispose();
+        _texture.Dispose();
     }
 
     protected override void Update(GameTime gameTime)
@@ -71,6 +78,11 @@ public class SampleGame : Game
     {
         // Render stuff in here. Do NOT run game logic in here!
         GraphicsDevice.Clear(Color.CornflowerBlue);
+
+        _spriteBatch.Begin();
+        _spriteBatch.Draw(_texture, Vector2.Zero, Color.White);
+        _spriteBatch.End();
+        
         base.Draw(gameTime);
     }
 }
