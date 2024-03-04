@@ -1,6 +1,8 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+const maxLogs = 500;
+const maxErrors = 500;
 let logs = [];
 let errors = [];
 let oldConsoleLog = console.log;
@@ -33,7 +35,39 @@ console.warn = function (e) {
 
 import { dotnet } from './_framework/dotnet.js'
 
+//we load the asset manifest early so that we can use it to set the dotnet config
+let assetManifest = await globalThis.fetch("asset_manifest.csv");
+let assetManifestText = "";
+if (!assetManifest.ok)
+{
+    console.error("Unable to load asset manifest");
+    console.error(assetManifest);
+}
+else {
+    assetManifestText = await assetManifest.text();
+}
+let assetList = assetManifestText.split('\n')
+    .filter(i => i)
+    .map(i => i.trim().replace('\\', '/'));
+console.log(`Found ${assetList.length} assets in manifest`);
+
 const { setModuleImports, getAssemblyExports, getConfig } = await dotnet
+    .withModuleConfig({
+        onConfigLoaded: (config) => {
+            if (!config.resources.vfs) {
+                config.resources.vfs = {}
+            }
+
+            for (let asset of assetList)
+            {
+                asset = asset.trim();
+                console.log(`Found ${asset}, adding to VFS`);
+                config.resources.vfs[asset] = {};
+                const assetPath = `../${asset}`;
+                config.resources.vfs[asset][assetPath] = null;
+            }
+        },
+    })
     .withDiagnosticTracing(false)
     .withApplicationArgumentsFromQuery()
     .create();
@@ -43,8 +77,6 @@ setModuleImports('main.js', {
 });
 
 //logging frontend
-const maxLogs = 500;
-const maxErrors = 500;
 let logsEl = document.getElementById("logs");
 let errorsEl = document.getElementById("errors");
 let logElements = [];
