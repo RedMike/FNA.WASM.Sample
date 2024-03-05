@@ -44,14 +44,20 @@
   </ItemGroup>
 
     <PropertyGroup>
+        <CustomAssetRoot>..\FNA.WASM.Sample.Assets\assets</CustomAssetRoot>
+        <CustomAssetNewRoot>wwwroot\assets\</CustomAssetNewRoot>
+        <CustomAssetRelativeRoot>assets\</CustomAssetRelativeRoot>
         <CustomAssetManifestRoot>wwwroot</CustomAssetManifestRoot>
         <CustomAssetManifestFile>asset_manifest.csv</CustomAssetManifestFile>
         <CustomAssetManifestVerbose>false</CustomAssetManifestVerbose>
         <CustomAssetManifestVerbose Condition="$(Configuration) == 'Debug'">true</CustomAssetManifestVerbose>
     </PropertyGroup>
     <ItemGroup>
+        <CustomAssets Include="$(CustomAssetRoot)\**\*"
+                 Link="$(CustomAssetNewRoot)%(RecursiveDir)%(Filename)%(Extension)" 
+                 RelativePath="$(CustomAssetRelativeRoot)%(RecursiveDir)%(Filename)%(Extension)"
+                 CopyToPublishDirectory="PreserveNewest"/>
         <Content Remove="$(CustomAssetManifestRoot)\$(CustomAssetManifestFile)" />
-        <CustomAssets Include="wwwroot\assets\**\*"/>
     </ItemGroup>
     <Target Name="CustomAssetManifest_PackageAssets" BeforeTargets="AssignTargetPaths">
         <PropertyGroup>
@@ -59,7 +65,7 @@
             <IntermediateCustomAssetManifestPath>$(IntermediateCustomAssetManifestRootPath)$(CustomAssetManifestFile)</IntermediateCustomAssetManifestPath>
         </PropertyGroup>
         <ItemGroup>
-            <CustomAssetsNoRoot Include="@(CustomAssets -> '/assets/%(RecursiveDir)%(Filename)%(Extension)')" />
+            <CustomAssetsNoRoot Include="@(CustomAssets -> '\$(CustomAssetRelativeRoot)%(RecursiveDir)%(Filename)%(Extension)')" />
         </ItemGroup>
 
         <Message Text="No custom assets to bundle" Condition="@(CustomAssetsNoRoot->Count()) == 0 and $(CustomAssetManifestVerbose) == 'true'" />
@@ -85,6 +91,22 @@
 
     <Target Name="CustomAssetManifest_Build" DependsOnTargets="CustomAssetManifest_PackageAssets" BeforeTargets="GenerateStaticWebAssetsManifest">
         <DefineStaticWebAssets
+                CandidateAssets="@(CustomAssets)"
+                SourceId="$(PackageId)"
+                SourceType="Computed"
+                AssetKind="Build"
+                AssetRole="Primary"
+                CopyToOutputDirectory="PreserveNewest"
+                CopyToPublishDirectory="Never"
+                ContentRoot="$(OutDir)/wwwroot"
+                BasePath="/"
+                RelativePathPattern=""
+                RelativePathFilter=""
+                Condition=""
+        >
+            <Output TaskParameter="Assets" ItemName="CustomAssetWebAssets" />
+        </DefineStaticWebAssets>
+        <DefineStaticWebAssets
                 CandidateAssets="@(IntermediateCustomAssetManifestItem)"
                 SourceId="$(PackageId)"
                 SourceType="Computed"
@@ -102,11 +124,28 @@
         </DefineStaticWebAssets>
 
         <ItemGroup>
+            <StaticWebAsset Include="@(CustomAssetWebAssets)" />
             <StaticWebAsset Include="@(CustomAssetManifestAsset)" />
         </ItemGroup>
     </Target>
 
     <Target Name="CustomAssetManifest_Publish" DependsOnTargets="CustomAssetManifest_PackageAssets" BeforeTargets="ComputeFilesToPublish">
+        <DefineStaticWebAssets
+                CandidateAssets="@(CustomAssets)"
+                SourceId="$(PackageId)"
+                SourceType="Computed"
+                AssetKind="Build"
+                AssetRole="Primary"
+                CopyToOutputDirectory="PreserveNewest"
+                CopyToPublishDirectory="Never"
+                ContentRoot="$(PublishDir)/wwwroot"
+                BasePath="/"
+                RelativePathPattern=""
+                RelativePathFilter=""
+                Condition=""
+        >
+            <Output TaskParameter="Assets" ItemName="CustomAssetWebAssets" />
+        </DefineStaticWebAssets>
         <DefineStaticWebAssets
                 CandidateAssets="@(IntermediateCustomAssetManifestItem)"
                 SourceId="$(PackageId)"
@@ -125,6 +164,7 @@
         </DefineStaticWebAssets>
 
         <ItemGroup>
+            <StaticWebAsset Include="@(CustomAssetWebAssets)" />
             <StaticWebAsset Include="@(CustomAssetManifestAsset)" />
         </ItemGroup>
     </Target>

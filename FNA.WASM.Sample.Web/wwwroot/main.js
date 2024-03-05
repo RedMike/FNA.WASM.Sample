@@ -48,8 +48,9 @@ else {
 }
 let assetList = assetManifestText.split('\n')
     .filter(i => i)
-    .map(i => i.trim().replace('\\', '/'));
+    .map(i => i.trim().replaceAll('\\', '/'));
 console.log(`Found ${assetList.length} assets in manifest`);
+console.log(assetList);
 
 const { setModuleImports, getAssemblyExports, getConfig } = await dotnet
     .withModuleConfig({
@@ -61,6 +62,10 @@ const { setModuleImports, getAssemblyExports, getConfig } = await dotnet
             for (let asset of assetList)
             {
                 asset = asset.trim();
+                if (asset[0] === '/')
+                {
+                    asset = asset.substring(1);
+                }
                 console.log(`Found ${asset}, adding to VFS`);
                 config.resources.vfs[asset] = {};
                 const assetPath = `../${asset}`;
