@@ -60,7 +60,7 @@ public class SampleGame : Game
         gdm.SynchronizeWithVerticalRetrace = true; //TODO: does this do anything on WebGL?
         _viewportOffset = new Vector2(-gdm.PreferredBackBufferWidth / 2.0f, -gdm.PreferredBackBufferHeight / 2.0f);
 
-        Content.RootDirectory = "/assets";
+        Content.RootDirectory = "assets";
     }
     
     protected override void Initialize()

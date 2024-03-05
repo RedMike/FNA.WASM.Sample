@@ -10,6 +10,13 @@
     <ItemGroup>
       <ProjectReference Include="..\FNA.WASM.Sample.Core\FNA.WASM.Sample.Core.csproj" />
     </ItemGroup>
+    
+    <ItemGroup>
+        <Content Include="..\FNA.WASM.Sample.Assets\assets\**\*"
+                 Link="assets\%(RecursiveDir)%(Filename)%(Extension)" 
+                 CopyToOutputDirectory="PreserveNewest"
+                 CopyToPublishDirectory="PreserveNewest"/>
+    </ItemGroup>
 
     <ItemGroup>
         <None Include="..\lib\FNA3D\x64\FAudio.dll" CopyToOutputDirectory="PreserveNewest">
