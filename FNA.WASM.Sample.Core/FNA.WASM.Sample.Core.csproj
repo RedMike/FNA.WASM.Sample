@@ -8,5 +8,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\FNA\FNA.Core.csproj" />
+      <ProjectReference Include="..\FontStashSharp\src\XNA\FontStashSharp.FNA.Core.csproj" />
     </ItemGroup>
 </Project>

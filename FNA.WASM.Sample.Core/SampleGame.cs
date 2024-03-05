@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FontStashSharp;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -11,6 +12,7 @@ public class SampleGame : Game
     private GamePadState _gamepadPrev = new GamePadState();
 
     private SpriteBatch _spriteBatch;
+    private FontSystem _fontSystem;
     private readonly Dictionary<string, Texture2D> _textures = new Dictionary<string, Texture2D>();
 
     private class Entity
@@ -49,6 +51,9 @@ public class SampleGame : Game
     private List<Entity> _meteors = new List<Entity>();
 
     private Vector2 _viewportOffset = Vector2.Zero;
+    private float _rollingRenderFps = 30.0f;
+    private float _rollingUpdateFps = 30.0f;
+    private const float RollingHistory = 30.0f;
     
     public SampleGame()
     {
@@ -103,6 +108,9 @@ public class SampleGame : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
+        
+        _fontSystem = new FontSystem();
+        _fontSystem.AddFont(File.ReadAllBytes(Content.RootDirectory + "/fonts/Roboto-Regular.ttf"));
 
         _textures["ship1"] = Content.Load<Texture2D>("img/ship1.png");
         _textures["meteor1"] = Content.Load<Texture2D>("img/meteor1.png");
@@ -136,6 +144,10 @@ public class SampleGame : Game
 
     protected override void Update(GameTime gameTime)
     {
+        //calculate update FPS
+        var lastFramerate = 1 / (float)gameTime.ElapsedGameTime.TotalSeconds;
+        _rollingUpdateFps = (_rollingUpdateFps * (RollingHistory - 1) + lastFramerate) / RollingHistory;
+        
         var keyboard = Keyboard.GetState();
         var mouse = Mouse.GetState();
         var gamepad = GamePad.GetState(PlayerIndex.One);
@@ -173,13 +185,21 @@ public class SampleGame : Game
 
     protected override void Draw(GameTime gameTime)
     {
-        // Render stuff in here. Do NOT run game logic in here!
+        //calculate render FPS
+        var lastFramerate = 1 / (float)gameTime.ElapsedGameTime.TotalSeconds;
+        _rollingRenderFps = (_rollingRenderFps * (RollingHistory - 1) + lastFramerate) / RollingHistory;
+        
         GraphicsDevice.Clear(Color.DarkBlue);
 
         var cameraPos = _ship?.Position ?? Vector2.Zero;
         cameraPos += _viewportOffset;
 
         _spriteBatch.Begin();
+
+        var font = _fontSystem.GetFont(18.0f);
+        _spriteBatch.DrawString(font, $"Render FPS: {_rollingRenderFps:F0} ({lastFramerate:F0})", Vector2.Zero, Color.White);
+        _spriteBatch.DrawString(font, $"Update FPS: {_rollingUpdateFps:F0}", new Vector2(0.0f, 20.0f), Color.White);
+        
         if (_ship != null)
         {
             Draw(cameraPos, _ship);
