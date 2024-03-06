@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 namespace FNA.WASM.Sample.Core;
 
@@ -14,6 +15,7 @@ public class SampleGame : Game
     private SpriteBatch _spriteBatch;
     private FontSystem _fontSystem;
     private readonly Dictionary<string, Texture2D> _textures = new Dictionary<string, Texture2D>();
+    private readonly Dictionary<string, Song> _sounds = new Dictionary<string, Song>();
 
     private class Entity
     {
@@ -49,6 +51,7 @@ public class SampleGame : Game
     }
     private Entity? _ship;
     private List<Entity> _meteors = new List<Entity>();
+    private bool _shouldPlaySound = false;
 
     private Vector2 _viewportOffset = Vector2.Zero;
     private float _rollingRenderFps = 30.0f;
@@ -117,6 +120,10 @@ public class SampleGame : Game
         _textures["meteor2"] = Content.Load<Texture2D>("img/meteor2.png");
         _textures["meteor3"] = Content.Load<Texture2D>("img/meteor3.png");
         _textures["meteor4"] = Content.Load<Texture2D>("img/meteor4.png");
+        
+        _sounds["impact000"] = Content.Load<Song>("audio/impact000.ogg");
+        _sounds["impact001"] = Content.Load<Song>("audio/impact001.ogg");
+        _sounds["impact002"] = Content.Load<Song>("audio/impact002.ogg");
     }
 
     protected override void UnloadContent()
@@ -147,6 +154,13 @@ public class SampleGame : Game
         //calculate update FPS
         var lastFramerate = 1 / (float)gameTime.ElapsedGameTime.TotalSeconds;
         _rollingUpdateFps = (_rollingUpdateFps * (RollingHistory - 1) + lastFramerate) / RollingHistory;
+
+        if (_shouldPlaySound)
+        {
+            var rnd = new Random();
+            MediaPlayer.Play(_sounds["impact00" + rnd.Next(0, 3)]);
+            _shouldPlaySound = false;
+        }
         
         var keyboard = Keyboard.GetState();
         var mouse = Mouse.GetState();
@@ -160,6 +174,7 @@ public class SampleGame : Game
         if (mouse.LeftButton == ButtonState.Released && _mousePrev.LeftButton == ButtonState.Pressed)
         {
             Console.WriteLine("Mouse clicked!");
+            _shouldPlaySound = true;
         }
 
         if (gamepad.Buttons.A == ButtonState.Released && _gamepadPrev.Buttons.A == ButtonState.Pressed)
