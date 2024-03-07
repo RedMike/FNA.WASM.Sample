@@ -77,6 +77,21 @@ const { setModuleImports, getAssemblyExports, getConfig } = await dotnet
     .withApplicationArgumentsFromQuery()
     .create();
 
+//set canvas
+var canvas = document.getElementById("canvas");
+dotnet.instance.Module.canvas = canvas;
+
+const config = getConfig();
+const exports = await getAssemblyExports(config.mainAssemblyName);
+const onUserInteraction = exports.Program.OnUserInteraction;
+
+canvas.addEventListener("click", (e) => {
+    onUserInteraction() 
+});
+canvas.addEventListener("touchstart",  (e) => {
+    onUserInteraction() 
+});
+
 setModuleImports('main.js', {
     setMainLoop: (cb) => dotnet.instance.Module.setMainLoop(cb)
 });
@@ -135,7 +150,4 @@ let updateErrors = () => {
 }
 updateErrors();
 
-//set canvas
-var canvas = document.getElementById("canvas");
-dotnet.instance.Module.canvas = canvas;
 await dotnet.run();

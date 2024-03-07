@@ -4,7 +4,7 @@ using FNA.WASM.Sample.Core;
 
 public static partial class Program
 {
-internal static void Main()
+    internal static void Main()
     {
         Console.WriteLine("Setting up main loop");
         SetMainLoop(MainLoop);
@@ -13,6 +13,15 @@ internal static void Main()
     private static bool _firstRun = true;
     private static DateTime _lastLog = DateTime.UnixEpoch;
     private static SampleGame _myGame;
+
+    [JSExport]
+    internal static void OnUserInteraction()
+    {
+        if (_myGame != null)
+        {
+            _myGame.OnAudioAllowedToInit();
+        }
+    }
 
     private static void MainLoop()
     {

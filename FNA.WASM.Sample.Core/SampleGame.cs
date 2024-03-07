@@ -1,5 +1,6 @@
 ﻿using FontStashSharp;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
@@ -15,7 +16,11 @@ public class SampleGame : Game
     private SpriteBatch _spriteBatch;
     private FontSystem _fontSystem;
     private readonly Dictionary<string, Texture2D> _textures = new Dictionary<string, Texture2D>();
-    private readonly Dictionary<string, Song> _sounds = new Dictionary<string, Song>();
+    
+    private readonly Dictionary<string, SoundEffect> _sounds = new Dictionary<string, SoundEffect>();
+    private readonly Dictionary<string, Song> _songs = new Dictionary<string, Song>();
+
+    private bool _audioInit = false;
 
     private class Entity
     {
@@ -52,6 +57,7 @@ public class SampleGame : Game
     private Entity? _ship;
     private List<Entity> _meteors = new List<Entity>();
     private bool _shouldPlaySound = false;
+    private bool _shouldBePlayingMusic = false;
 
     private Vector2 _viewportOffset = Vector2.Zero;
     private float _rollingRenderFps = 30.0f;
@@ -69,6 +75,18 @@ public class SampleGame : Game
         _viewportOffset = new Vector2(-gdm.PreferredBackBufferWidth / 2.0f, -gdm.PreferredBackBufferHeight / 2.0f);
 
         Content.RootDirectory = "assets";
+    }
+
+    public void OnAudioAllowedToInit()
+    {
+        //we have to wait for a user to interact with the app before we're allowed to use the audio system
+        if (!_audioInit)
+        {
+            Console.WriteLine("Initialising audio");
+            _audioInit = true;
+            _songs["music"] = Content.Load<Song>("audio/music.ogg");
+            _sounds["click"] = Content.Load<SoundEffect>("audio/click.wav");
+        }
     }
     
     protected override void Initialize()
@@ -120,10 +138,6 @@ public class SampleGame : Game
         _textures["meteor2"] = Content.Load<Texture2D>("img/meteor2.png");
         _textures["meteor3"] = Content.Load<Texture2D>("img/meteor3.png");
         _textures["meteor4"] = Content.Load<Texture2D>("img/meteor4.png");
-        
-        _sounds["impact000"] = Content.Load<Song>("audio/impact000.ogg");
-        _sounds["impact001"] = Content.Load<Song>("audio/impact001.ogg");
-        _sounds["impact002"] = Content.Load<Song>("audio/impact002.ogg");
     }
 
     protected override void UnloadContent()
@@ -155,13 +169,27 @@ public class SampleGame : Game
         var lastFramerate = 1 / (float)gameTime.ElapsedGameTime.TotalSeconds;
         _rollingUpdateFps = (_rollingUpdateFps * (RollingHistory - 1) + lastFramerate) / RollingHistory;
 
-        if (_shouldPlaySound)
+        if (_audioInit)
         {
-            var rnd = new Random();
-            MediaPlayer.Play(_sounds["impact00" + rnd.Next(0, 3)]);
-            _shouldPlaySound = false;
+            if (_shouldPlaySound)
+            {
+                _sounds["click"].Play();
+                _shouldPlaySound = false;
+            }
+
+            if (_shouldBePlayingMusic &&
+                (MediaPlayer.State == MediaState.Stopped || MediaPlayer.State == MediaState.Paused))
+            {
+                Console.WriteLine("Starting to play music");
+                MediaPlayer.Play(_songs["music"]);
+            }
+            else if (!_shouldBePlayingMusic && MediaPlayer.State == MediaState.Playing)
+            {
+                Console.WriteLine("Stopping music");
+                MediaPlayer.Stop();
+            }
         }
-        
+
         var keyboard = Keyboard.GetState();
         var mouse = Mouse.GetState();
         var gamepad = GamePad.GetState(PlayerIndex.One);
@@ -169,6 +197,7 @@ public class SampleGame : Game
         if (keyboard.IsKeyUp(Keys.Space) && _keyboardPrev.IsKeyDown(Keys.Space))
         {
             Console.WriteLine("Space bar pressed!");
+            _shouldBePlayingMusic = !_shouldBePlayingMusic;
         }
 
         if (mouse.LeftButton == ButtonState.Released && _mousePrev.LeftButton == ButtonState.Pressed)
