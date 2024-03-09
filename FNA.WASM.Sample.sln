@@ -23,6 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib_browser-wasm", "Lib_bro
 		lib\FNA3D\browser-wasm\FNA3D.a = lib\FNA3D\browser-wasm\FNA3D.a
 		lib\FNA3D\browser-wasm\libmojoshader.a = lib\FNA3D\browser-wasm\libmojoshader.a
 		lib\SDL2\browser-wasm\SDL2.a = lib\SDL2\browser-wasm\SDL2.a
+		lib\cimgui\browser-wasm\cimgui.a = lib\cimgui\browser-wasm\cimgui.a
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FNA.Core", "FNA\FNA.Core.csproj", "{577593E9-0A1B-461E-B701-7DBAFAE831F3}"

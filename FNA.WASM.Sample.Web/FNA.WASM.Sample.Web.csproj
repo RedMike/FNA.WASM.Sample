@@ -27,6 +27,9 @@
       <NativeFileReference Include="..\lib\FNA3D\browser-wasm\libmojoshader.a">
           <Visible>false</Visible>
       </NativeFileReference>
+      <NativeFileReference Include="..\lib\cimgui\browser-wasm\cimgui.a">
+          <Visible>false</Visible>
+      </NativeFileReference>
       
       <EmccExportedRuntimeMethod Include="SDL">
           <Visible>false</Visible>

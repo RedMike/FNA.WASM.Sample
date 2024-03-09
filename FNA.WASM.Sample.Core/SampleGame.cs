@@ -1,4 +1,6 @@
-﻿using FontStashSharp;
+﻿using FNA.WASM.Sample.Core.ImGuiHelpers;
+using FontStashSharp;
+using ImGuiNET;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,6 +14,8 @@ public class SampleGame : Game
     private KeyboardState _keyboardPrev = new KeyboardState();
     private MouseState _mousePrev = new MouseState();
     private GamePadState _gamepadPrev = new GamePadState();
+    
+    private ImGuiRenderer _imGuiRenderer;
 
     private SpriteBatch _spriteBatch;
     private FontSystem _fontSystem;
@@ -75,6 +79,8 @@ public class SampleGame : Game
         _viewportOffset = new Vector2(-gdm.PreferredBackBufferWidth / 2.0f, -gdm.PreferredBackBufferHeight / 2.0f);
 
         Content.RootDirectory = "assets";
+        
+        IsMouseVisible = true;
     }
 
     public void OnAudioAllowedToInit()
@@ -91,6 +97,9 @@ public class SampleGame : Game
     
     protected override void Initialize()
     {
+        _imGuiRenderer = new ImGuiRenderer(this);
+        _imGuiRenderer.RebuildFontAtlas();
+        
         var rnd = new Random();
         _ship = new Entity()
         {
@@ -241,8 +250,10 @@ public class SampleGame : Game
         _spriteBatch.Begin();
 
         var font = _fontSystem.GetFont(18.0f);
-        _spriteBatch.DrawString(font, $"Render FPS: {_rollingRenderFps:F0} ({lastFramerate:F0})", Vector2.Zero, Color.White);
-        _spriteBatch.DrawString(font, $"Update FPS: {_rollingUpdateFps:F0}", new Vector2(0.0f, 20.0f), Color.White);
+        var msg1 = $"Render FPS: {_rollingRenderFps:F0} ({lastFramerate:F0})";
+        var msg2 = $"Update FPS: {_rollingUpdateFps:F0}";
+        _spriteBatch.DrawString(font, msg1, Vector2.Zero, Color.White);
+        _spriteBatch.DrawString(font, msg2, new Vector2(0.0f, 20.0f), Color.White);
         
         if (_ship != null)
         {
@@ -254,6 +265,14 @@ public class SampleGame : Game
             Draw(cameraPos, entity);
         }
         _spriteBatch.End();
+        
+        _imGuiRenderer.BeforeLayout(gameTime);
+        ImGui.Begin("Test Window");
+        //have to use TextUnformatted because variadic arguments don't seem to work in WASM
+        ImGui.TextUnformatted(msg1);
+        ImGui.TextUnformatted(msg2);
+        ImGui.End();
+        _imGuiRenderer.AfterLayout();
         
         base.Draw(gameTime);
     }

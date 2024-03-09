@@ -4,10 +4,15 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\FNA\FNA.Core.csproj" />
       <ProjectReference Include="..\FontStashSharp\src\XNA\FontStashSharp.FNA.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="ImGui.NET" Version="1.90.1.1" />
     </ItemGroup>
 </Project>
