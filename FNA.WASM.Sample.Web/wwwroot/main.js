@@ -150,4 +150,5 @@ let updateErrors = () => {
 }
 updateErrors();
 
+globalThis.dotnetInstance = dotnet.instance;
 await dotnet.run();
